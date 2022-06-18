@@ -5,26 +5,26 @@ This is what I learnt TryHackMe's Jr Penetration Tester Path's privilage escalat
 
 # Enumeration
 *Find Hostname
-- hostname
+ - hostname
 
 *Find uname
 - uname -a 
-   \__ for all information
+ - for all information
 ---------------------
 Function	Shortcut
 ---------------------
-Kernel Name	-s
-Kernel Release	-r
-Kernel Version*	-v
-Network Node Name (Hostname)	-n
-Machine architecture	-m
-Processor architecture	-p
-Hardware Platform (OS architecture)	-i
-Operating System	-o
+- Kernel Name	-s
+- Kernel Release	-r
+- Kernel Version*	-v
+- Network Node Name (Hostname)	-n
+- Machine architecture	-m
+- Processor architecture	-p
+- Hardware Platform (OS architecture)	-i
+- Operating System	-o
 ---------------------
 
 */proc/version
- \__ provides information about the target system processes.
+ - provides information about the target system processes.
  
 */etc/issues
  \__ This file usually contains some information about the operating system but can easily be customized or changes.
