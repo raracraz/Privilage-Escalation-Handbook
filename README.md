@@ -68,7 +68,7 @@ Function Shortcut
   - find / -name python*
   - find / -name gcc*
   - find / -perm -u=s -type f 2>/dev/null: `Find files with the SUID bit, which allows us to run the file with a higher privilege level than the current user.`
- 
+  - find / -perm -4000 -exec ls -ldb {} \; 2>/dev/null `for more info on files with SUID set` 
 # Automated Enumeration Tools
 
   - LinPeas: https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
