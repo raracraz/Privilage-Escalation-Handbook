@@ -78,3 +78,16 @@ Function Shortcut
   - Linux Priv Checker: https://github.com/linted/linuxprivchecker
 
 # Privilege Escalation: Kernel Exploits
+
+  - Find version of system
+  - Exploit-db: https://www.exploit-db.com
+  - linux kernel: https://www.linuxkernelcves.com/cves
+  - Google: https://www.google.com
+  - Searchsploit
+  
+# Privilege Escalation: Sudo
+
+  - sudo -l: `Check root privilages`
+  - GTFObin: https://gtfobins.github.io/
+
+# Privilege Escalation: SUID
