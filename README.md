@@ -1,5 +1,5 @@
 # Privilage Escalation Handbook
-This is what I learnt TryHackMe's Jr Penetration Tester Path's privilage escalation modules
+# Includes Linux and Windows
 
 # Linux Privilage Escalation
 
