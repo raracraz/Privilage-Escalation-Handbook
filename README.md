@@ -91,3 +91,13 @@ Function Shortcut
   - GTFObin: https://gtfobins.github.io/
 
 # Privilege Escalation: SUID
+
+  - find / -type f -perm -04000 -ls 2>/dev/null: `list files that have SUID or SGID bits set.`
+  - GTFObin: https://gtfobins.github.io/
+  *If you can view /etc/shadow and /etc/passwd, can copy to attacker machine and use JohnTheRipper to find credentials*
+  - unshadow passwd.txt shadow.txt > passwords.txt
+  *If you can write to /etc/passwd*
+  - openssl passwd -1 salt THM password1
+  - add "root:/bin/bash" to end of user in /etc/passwd
+
+# Privilege Escalation: Capabilities
