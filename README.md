@@ -8,8 +8,7 @@ This is what I learnt TryHackMe's Jr Penetration Tester Path's privilage escalat
   - hostname
 
 *Find uname
-- uname -a 
-  - for all information
+- uname -a `for all information`
 ---------------------
 Function	Shortcut
 ---------------------
