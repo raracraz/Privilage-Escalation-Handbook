@@ -10,8 +10,8 @@ This is what I learnt TryHackMe's Jr Penetration Tester Path's privilage escalat
 *Find uname
   - uname -a `for all information`
 ---------------------
-Function	Shortcut
----------------------
+Function Shortcut
+
 - Kernel Name	-s
 - Kernel Release	-r
 - Kernel Version*	-v
@@ -69,4 +69,12 @@ Function	Shortcut
   - find / -name gcc*
   - find / -perm -u=s -type f 2>/dev/null: `Find files with the SUID bit, which allows us to run the file with a higher privilege level than the current user.`
  
- 
+# Automated Enumeration Tools
+
+  - LinPeas: `https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS`
+  - LinEnum: `https://github.com/rebootuser/LinEnum`
+  - LES (Linux Exploit Suggester): https://github.com/mzet-/linux-exploit-suggester
+  - Linux Smart Enumeration: https://github.com/diego-treitos/linux-smart-enumeration
+  - Linux Priv Checker: https://github.com/linted/linuxprivchecker
+
+# Privilege Escalation: Kernel Exploits
