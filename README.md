@@ -5,11 +5,11 @@ This is what I learnt TryHackMe's Jr Penetration Tester Path's privilage escalat
 
 # Enumeration
 *Find Hostname
- - hostname
+  - hostname
 
 *Find uname
 - uname -a 
- - for all information
+  - for all information
 ---------------------
 Function	Shortcut
 ---------------------
